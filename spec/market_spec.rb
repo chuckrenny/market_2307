@@ -96,8 +96,30 @@ RSpec.describe Market do
     end
   end
 
+  describe "#overstocked_items" do
+    it 'can find array of items that are overstocked' do
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor1.stock(item3, 25)
+      vendor1.stock(item4, 50)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+
+      market.add_vendor(vendor1)
+      market.add_vendor(vendor2)
+      market.add_vendor(vendor3)
+
+      # An array of Item objects that are overstocked. 
+      # An item is overstocked if it is sold by more than 1 vendor 
+      # AND the total quantity is greater than 50.
+
+      expect(market.overstocked_items).to eq([item1,item4])
+    end
+  end
+
   describe "total_inventory" do
-    xit 'can find the quantity of all items sold at the market' do
+    it 'can find the quantity of all items sold at the market' do
       # Reports the quantities of all items sold at the market. 
       # Specifically, it should return a hash with items as keys and 
       # hashes as values - this sub-hash should have two key/value pairs: 
@@ -110,7 +132,39 @@ RSpec.describe Market do
       #   }
       # }
 
+      
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor1.stock(item3, 25)
+      vendor1.stock(item4, 50)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
 
+      market.add_vendor(vendor1)
+      market.add_vendor(vendor2)
+      market.add_vendor(vendor3)
+
+      item_inventory = {
+        item1 => {
+          quantity: 100,
+          vendors: [vendor1, vendor3]
+        },
+        item2 => {
+          quantity: 7,
+          vendors: [vendor1]
+        },
+        item3 => {
+          quantity: 50,
+          vendors: [vendor1, vendor2]
+        },
+        item4 => {
+          quantity: 100,
+          vendors: [vendor1, vendor2]
+        }
+      }
+
+      expect(market.total_inventory).to eq(item_inventory)
     end
   end
 end
