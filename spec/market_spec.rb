@@ -77,4 +77,40 @@ RSpec.describe Market do
       expect(vendor3.potential_revenue).to eq(48.75)
     end
   end
+
+  describe "#sorted_item_list" do
+    it 'can find the names of all items the Vendors have in stock' do
+      vendor1.stock(item1, 35)
+      vendor1.stock(item2, 7)
+      vendor1.stock(item3, 25)
+      vendor1.stock(item4, 50)
+      vendor2.stock(item4, 50)
+      vendor2.stock(item3, 25)
+      vendor3.stock(item1, 65)
+
+      market.add_vendor(vendor1)
+      market.add_vendor(vendor2)
+      market.add_vendor(vendor3)
+
+      expect(market.sorted_item_list).to eq(['Banana Nice Cream', 'Peach', 'Peach-Raspberry Nice Cream', 'Tomato'])
+    end
+  end
+
+  describe "total_inventory" do
+    xit 'can find the quantity of all items sold at the market' do
+      # Reports the quantities of all items sold at the market. 
+      # Specifically, it should return a hash with items as keys and 
+      # hashes as values - this sub-hash should have two key/value pairs: 
+      # quantity pointing to total inventory for that item and vendors 
+      # pointing to an array of the vendors that sell that item.
+      # {
+      #   items => {
+      #     quantity => total_inventory for that item,
+      #     vendors => array of vendors that sell taht item
+      #   }
+      # }
+
+
+    end
+  end
 end
